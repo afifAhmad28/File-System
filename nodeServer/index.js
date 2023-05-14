@@ -24,7 +24,7 @@ io.on('connection',(socket)=>{
             end:curr['size']
         });
         read.on("data",(chunk)=>{
-            socket.broadcast.emit('file-change',chunk);
+            socket.emit('file-change',chunk);
         });
     });
     socket.on('add',(line)=>{
