@@ -5,11 +5,15 @@ const io=require('socket.io')(8000,{
     }
 });
 io.on('connection',(socket)=>{
-    var readStream=fs.createReadStream('a.txt',{
-        encoding:'utf-8',
-    })
-    readStream.on("data",(chunk)=>{
-        socket.emit('init',chunk);
+    socket.on("ask",()=>{
+            console.log(x);
+            var readStream=fs.createReadStream('a.txt',{
+            encoding:'utf-8',
+            });
+            readStream.on("data",(chunk)=>{
+                console.log("init",chunk);
+                socket.emit('init',chunk);
+            });
     });
     fs.watchFile('a.txt',{
         bigint:false,
@@ -20,13 +24,15 @@ io.on('connection',(socket)=>{
             encoding:'utf-8',
             start:prev['size'],
             end:curr['size']
-        })
+        });
+        console.log("Hello");
         read.on("data",(chunk)=>{
-            socket.emit('file-change',chunk);
-        })
+            socket.broadcast.emit('file-change',chunk);
+            console.log("change",chunk);
+        });
     });
     socket.on('add',(line)=>{
         var lin="\n"+line;
         fs.appendFileSync('a.txt',lin);
     });
-})
+});
