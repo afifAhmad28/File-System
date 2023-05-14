@@ -6,12 +6,10 @@ const io=require('socket.io')(8000,{
 });
 io.on('connection',(socket)=>{
     socket.on("ask",()=>{
-            console.log(x);
             var readStream=fs.createReadStream('a.txt',{
             encoding:'utf-8',
             });
             readStream.on("data",(chunk)=>{
-                console.log("init",chunk);
                 socket.emit('init',chunk);
             });
     });
@@ -25,10 +23,8 @@ io.on('connection',(socket)=>{
             start:prev['size'],
             end:curr['size']
         });
-        console.log("Hello");
         read.on("data",(chunk)=>{
             socket.broadcast.emit('file-change',chunk);
-            console.log("change",chunk);
         });
     });
     socket.on('add',(line)=>{
